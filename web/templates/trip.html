@@ -1,0 +1,103 @@
+{% extends "layout.html" %}
+{% block title %}Trip: {{ trip_name | title }}{% endblock %}
+
+{% block content %}
+<!-- Link to external custom stylesheet -->
+<link rel="stylesheet" href="{{ url_for('static', filename='css/custom.css') }}">
+
+<div class="container">
+  <h2 class="text-center mb-4">📍 Trip: {{ trip_name | title }}</h2>
+
+  <!-- Action buttons -->
+ <div class="d-flex flex-wrap justify-content-center gap-3 mb-4">
+  <a href="{{ url_for('trips.add_expense', trip_name=trip_name) }}" class="btn btn-warm">➕ Add Expense</a>
+  <a href="{{ url_for('charts.view_chart', trip_name=trip_name) }}" class="btn btn-warm">📊 View Chart</a>
+  <a href="{{ url_for('budgets.set_budget', trip_name=trip_name) }}" class="btn btn-warm">💰 Set Budget</a>
+  <a href="{{ url_for('trips.ai_recommendation', trip_name=trip_name) }}" class="btn btn-warm">🤖 AI Suggest</a>
+</div>
+
+  {% if expenses %}
+  <div class="table-responsive shadow-sm mb-4">
+    <table class="table table-striped align-middle">
+      <thead class="table-light">
+        <tr>
+          <th>Date</th>
+          <th>Category</th>
+          <th>Description</th>
+          <th class="text-end">Amount ($)</th>
+          <th class="text-center">Action</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for e in expenses %}
+        <tr>
+          <td>{{ e.date }}</td>
+          <td><span class="badge bg-secondary">{{ e.category }}</span></td>
+          <td>{{ e.description }}</td>
+          <td class="text-end">${{ "%.2f"|format(e.amount) }}</td>
+          <td class="text-center">
+            <form action="{{ url_for('trips.delete_expense', trip_name=trip_name, index=loop.index0) }}" method="POST" onsubmit="return confirm('Delete this expense?')">
+              <button type="submit" class="btn btn-sm btn-outline-danger">🗑️</button>
+            </form>
+          </td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+
+  <div class="row g-3">
+    <div class="col-md-4">
+      <div class="card shadow-sm p-3 text-center">
+        <h6>Total Spent</h6>
+        <h4 class="text-primary">${{ "%.2f"|format(total) }}</h4>
+      </div>
+    </div>
+    {% if budget is not none %}
+    <div class="col-md-4">
+      <div class="card shadow-sm p-3 text-center">
+        <h6>Budget</h6>
+        <h4 class="text-warning">${{ "%.2f"|format(budget) }}</h4>
+      </div>
+    </div>
+    <div class="col-md-4">
+      <div class="card shadow-sm p-3 text-center">
+        <h6>Remaining</h6>
+        <h4 class="{% if remaining < 0 %}text-danger{% else %}text-success{% endif %}">
+          ${{ "%.2f"|format(remaining) }}
+        </h4>
+      </div>
+    </div>
+    {% else %}
+    <div class="col">
+      <div class="alert alert-warning text-center">
+        ⚠️ No budget set. <a href="{{ url_for('budgets.set_budget', trip_name=trip_name) }}">Set one here</a>.
+      </div>
+    </div>
+    {% endif %}
+  </div>
+
+  <div class="mt-5">
+    <h5>📂 Category Breakdown</h5>
+    <ul class="list-group">
+      {% for cat, amt in category_totals.items() %}
+      <li class="list-group-item d-flex justify-content-between align-items-center">
+        {{ cat }}
+        <span class="badge bg-brown rounded-pill">${{ "%.2f"|format(amt) }}</span>
+
+      </li>
+      {% endfor %}
+    </ul>
+  </div>
+
+  {% else %}
+  <div class="alert alert-info text-center mt-4">
+    No expenses added yet for this trip.
+  </div>
+  {% endif %}
+
+  <div class="text-center mt-4">
+    <a href="{{ url_for('trips.home') }}" class="btn btn-outline-secondary">← Back to Trips</a>
+  </div>
+</div>
+{% endblock %}

@@ -1,0 +1,8 @@
+{% extends "layout.html" %}
+{% block content %}
+<h2>Category Chart for Trip: {{ trip_name }}</h2>
+
+<img src="{{ url_for('charts.category_chart_image', trip_name=trip_name) }}" class="img-fluid" alt="Category Chart" />
+<br>
+<a href="{{ url_for('trips.view_trip', trip_name=trip_name) }}" class="btn btn-secondary mt-3">Back to Trip</a>
+{% endblock %}

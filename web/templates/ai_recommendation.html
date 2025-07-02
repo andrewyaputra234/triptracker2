@@ -1,0 +1,19 @@
+{% extends "layout.html" %}
+
+{% block content %}
+  <h2>AI Budget Recommendation for "{{ trip_name }}"</h2>
+
+  <div id="chat-box" style="max-height: 500px; overflow-y: auto;"></div>
+  <div class="mt-3 d-flex">
+    <input type="text" id="user-input" class="form-control me-2" placeholder="Ask about your trip budget..." />
+    <button id="send-btn" class="btn btn-warm">Send</button>
+  </div>
+
+  <!-- Inject variables before loading JS -->
+  <script>
+    window.tripNameFromServer = "{{ trip_name }}";
+    window.suggestionFromServer = {{ suggestion | tojson | safe }};
+  </script>
+
+  <script src="{{ url_for('static', filename='js/ai_chat.js') }}"></script>
+{% endblock %}

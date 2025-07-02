@@ -1,0 +1,259 @@
+/* ========================
+   Base Styling
+======================== */
+body {
+  font-family: 'Merriweather', serif;
+  background-color: #fefcf9;
+  color: #4b382a;
+}
+
+/* ========================
+   Navbar Styling (Cozy Brown)
+======================== */
+.custom-navbar {
+  background-color: #5c4033 !important;
+  border-bottom: 2px solid #3e2f1c;
+}
+
+.navbar .navbar-brand {
+  color: #fefcf9;
+  font-weight: bold;
+  font-size: 1.4rem;
+}
+
+.navbar .navbar-brand:hover {
+  color: #dbc1ac;
+}
+
+/* ========================
+   Cards
+======================== */
+.card {
+  background-color: #fffaf3;
+  border: 1px solid #e0d6c1;
+  border-radius: 12px;
+}
+
+/* ========================
+   Buttons - Warm/Brown Theme
+======================== */
+.btn-warm {
+  background-color: #c08457;
+  color: white;
+  border: none;
+  transition: background-color 0.3s ease;
+}
+
+.btn-warm:hover {
+  background-color: #a0603d;
+  color: white;
+}
+
+.btn-brown {
+  background-color: #6f4e37;
+  color: #fff;
+  border-color: #6f4e37;
+  transition: background-color 0.3s ease, border-color 0.3s ease;
+}
+
+.btn-brown:hover {
+  background-color: #5c3e2d;
+  border-color: #5c3e2d;
+}
+
+.btn-outline-brown {
+  color: #6f4e37;
+  border: 1px solid #6f4e37;
+  transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+.btn-outline-brown:hover {
+  background-color: #6f4e37;
+  color: #fff;
+}
+
+/* ========================
+   Badges
+======================== */
+.badge.bg-secondary {
+  background-color: #a47551 !important;
+}
+
+.badge.bg-brown {
+  background-color: #7b4f2c;
+  color: #fff;
+}
+
+.badge.bg-brown-alt {
+  background-color: #8b5e3c;
+  color: #fff;
+}
+
+/* ========================
+   Tables
+======================== */
+.table-striped > tbody > tr:nth-of-type(odd) {
+  background-color: #fdf4e3;
+}
+
+/* ========================
+   Hero Banner
+======================== */
+.hero-banner {
+  height: 300px;
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  color: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 3rem;
+  font-weight: 700;
+  text-shadow: 2px 2px 6px rgba(0, 0, 0, 0.6);
+  transition: background-image 2s ease-in-out;
+  border-radius: 12px;
+  margin-bottom: 1.5rem;
+}
+
+/* ========================
+   Background Container
+======================== */
+#background-container {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background-size: cover;
+  background-position: center;
+  transition: opacity 1s ease-in-out;
+  opacity: 1;
+  z-index: -1;
+}
+
+/* Banner Overlay */
+#banner {
+  height: 300px;
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  transition: opacity 1s ease-in-out;
+  position: relative;
+  color: rgb(100, 47, 4);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-family: 'Merriweather', serif;
+  text-shadow: 0 0 8px rgb(255, 255, 255);
+  border-radius: 12px;
+}
+
+/* ========================
+   Transitions & Hover Effects
+======================== */
+.transition-hover {
+  transition: transform 0.25s ease, box-shadow 0.25s ease;
+  cursor: pointer;
+}
+
+.transition-hover:hover {
+  transform: translateY(-6px);
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+}
+
+/* ========================
+   AI Chat Styles
+======================== */
+.chat-box {
+  background-color: #fefcf9;
+  border: 1px solid #ddd0b4;
+  padding: 1rem;
+  border-radius: 10px;
+  max-height: 500px;
+  overflow-y: auto;
+  font-family: 'Courier New', Courier, monospace;
+  white-space: pre-wrap;
+}
+
+.chat-msg {
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 1rem;
+}
+
+.chat-msg.user {
+  align-items: flex-end;
+}
+
+.chat-msg.ai {
+  align-items: flex-start;
+}
+
+.chat-bubble {
+  padding: 0.75rem 1rem;
+  border-radius: 12px;
+  max-width: 80%;
+  display: inline-block;
+  word-wrap: break-word;
+  white-space: pre-wrap;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  line-height: 1.5;
+}
+
+/* Chat Bubble Colors */
+.chat-msg.user .chat-bubble {
+  background-color: #d9b99b;
+  color: #333;
+  align-self: flex-end;
+  border-bottom-right-radius: 0;
+}
+
+.chat-msg.ai .chat-bubble {
+  background-color: #f5e9dc;
+  color: #333;
+  border-bottom-left-radius: 0;
+}
+
+/* Chat Bubble Timestamps */
+.chat-timestamp {
+  font-size: 0.75rem;
+  color: #7d6c5c;
+  margin-top: 0.25rem;
+}
+
+/* Paragraphs inside bubbles */
+.chat-bubble p {
+  margin-bottom: 1rem;
+}
+
+/* Lists inside chat bubbles */
+.chat-bubble ul,
+.chat-bubble ol {
+  padding-left: 1.25rem;
+  margin-bottom: 0.75rem;
+  color: #5c3e2d;
+  font-weight: 500;
+}
+
+.chat-bubble li {
+  list-style-type: disc;
+  margin-bottom: 0.3rem;
+  line-height: 1.4;
+}
+
+/* ========================
+   AI Response Box (Optional)
+======================== */
+#ai-response {
+  background-color: #f1f1f1;
+  border-radius: 8px;
+  padding: 20px;
+  box-shadow: 0 0 8px rgba(0, 0, 0, 0.1);
+  font-size: 1.1rem;
+  line-height: 1.4;
+  max-width: 700px;
+  margin-top: 1rem;
+  white-space: pre-wrap;
+  font-family: 'Courier New', Courier, monospace;
+}

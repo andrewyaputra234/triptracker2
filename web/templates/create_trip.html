@@ -1,0 +1,12 @@
+{% extends "layout.html" %}
+{% block content %}
+<h2>Create New Trip</h2>
+<form method="POST">
+    <div class="mb-3">
+        <label for="trip_name" class="form-label">Trip Name</label>
+        <input type="text" class="form-control" id="trip_name" name="trip_name" required>
+    </div>
+    <button type="submit" class="btn btn-primary">Create</button>
+    <a href="{{ url_for('trips.home') }}" class="btn btn-secondary">Cancel</a>
+</form>
+{% endblock %}
