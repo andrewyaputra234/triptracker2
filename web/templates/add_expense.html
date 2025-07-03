@@ -9,7 +9,15 @@
     </div>
     <div class="mb-3">
         <label for="category" class="form-label">Category</label>
-        <input type="text" class="form-control" id="category" name="category" placeholder="e.g. Food, Transport" required>
+        <select id="category" name="category" class="form-control" required>
+            <option value="" selected>Select or type a category</option>
+            <option value="Food">Food</option>
+            <option value="Transport">Transport</option>
+            <option value="Accommodation">Accommodation</option>
+            <option value="Entertainment">Entertainment</option>
+            <option value="Shopping">Shopping</option>
+            <option value="Miscellaneous">Miscellaneous</option>
+        </select>
     </div>
     <div class="mb-3">
         <label for="description" class="form-label">Description</label>
@@ -22,4 +30,37 @@
     <button type="submit" class="btn btn-primary">Add Expense</button>
     <a href="{{ url_for('trips.view_trip', trip_name=trip_name) }}" class="btn btn-secondary ms-2">Cancel</a>
 </form>
+
+<!-- Include jQuery and Select2 JS -->
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
+<script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+
+<script>
+  $(document).ready(function() {
+    $('#category').select2({
+      tags: true,
+      placeholder: "Select or type a category",
+      allowClear: true,
+      width: '100%',
+      createTag: function(params) {
+        return {
+          id: params.term,
+          text: params.term,
+          newOption: true
+        }
+      },
+      templateResult: function(data) {
+        var $result = $("<span></span>");
+        $result.text(data.text);
+        if (data.newOption) {
+          $result.append(" <em>(new)</em>");
+        }
+        return $result;
+      }
+    });
+  });
+</script>
+
 {% endblock %}
+

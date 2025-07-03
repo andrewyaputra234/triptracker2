@@ -1,9 +1,11 @@
 import os
 import csv
+import pycountry
 from flask import Blueprint, render_template, request, redirect, url_for, flash, jsonify
 from collections import defaultdict
 from dotenv import load_dotenv
 from openai import OpenAI
+
 
 load_dotenv()
 
@@ -59,14 +61,19 @@ def home():
     return render_template("home.html", trips=trips_data, sort_order=sort_order)
 
 
+import pycountry
+
 @trips_bp.route("/create_trip", methods=["GET", "POST"])
 def create_trip():
+    countries = {country.alpha_2: country.name for country in pycountry.countries}
+
     if request.method == "POST":
+        country = request.form.get("country", "").strip()
         trip_name = request.form.get("trip_name", "").strip()
         budget = request.form.get("budget", "").strip()
 
-        if not trip_name or not budget:
-            flash("Trip name and budget cannot be empty.", "danger")
+        if not trip_name or not budget or not country:
+            flash("Country, trip name and budget cannot be empty.", "danger")
             return redirect(url_for("trips.create_trip"))
 
         try:
@@ -77,7 +84,10 @@ def create_trip():
             flash("Budget must be a valid number greater than 0.", "danger")
             return redirect(url_for("trips.create_trip"))
 
-        filename = os.path.join(TRIP_FOLDER, f"{trip_name.lower()}.csv")
+        # Combine country code and trip name to create filename
+        full_trip_name = f"{country}_{trip_name}".lower().replace(" ", "_")
+        filename = os.path.join(TRIP_FOLDER, f"{full_trip_name}.csv")
+
         if os.path.exists(filename):
             flash("Trip already exists.", "warning")
             return redirect(url_for("trips.create_trip"))
@@ -87,10 +97,11 @@ def create_trip():
             writer.writerow(["Budget", initial_budget])
             writer.writerow(["Date", "Category", "Description", "Amount"])
 
-        flash(f"Trip '{trip_name}' created successfully with budget ${initial_budget}!", "success")
+        flash(f"Trip '{country} {trip_name}' created successfully with budget ${initial_budget}!", "success")
         return redirect(url_for("trips.home"))
 
-    return render_template("create_trip.html")
+    return render_template("create_trip.html", countries=countries)
+
 
 
 @trips_bp.route("/trip/<trip_name>")
