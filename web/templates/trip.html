@@ -9,12 +9,11 @@
   <h2 class="text-center mb-4">📍 Trip: {{ trip_name | title }}</h2>
 
   <!-- Action buttons -->
- <div class="d-flex flex-wrap justify-content-center gap-3 mb-4">
-  <a href="{{ url_for('trips.add_expense', trip_name=trip_name) }}" class="btn btn-warm">➕ Add Expense</a>
-  <a href="{{ url_for('charts.view_chart', trip_name=trip_name) }}" class="btn btn-warm">📊 View Chart</a>
-  <a href="{{ url_for('budgets.set_budget', trip_name=trip_name) }}" class="btn btn-warm">💰 Set Budget</a>
-  <a href="{{ url_for('trips.ai_recommendation', trip_name=trip_name) }}" class="btn btn-warm">🤖 AI Suggest</a>
-</div>
+  <div class="d-flex flex-wrap justify-content-center gap-3 mb-4">
+    <a href="{{ url_for('trips.add_expense', trip_name=trip_name) }}" class="btn btn-warm">➕ Add Expense</a>
+    <a href="{{ url_for('charts.view_chart', trip_name=trip_name) }}" class="btn btn-warm">📊 View Chart</a>
+    <a href="{{ url_for('trips.ai_recommendation', trip_name=trip_name) }}" class="btn btn-warm">🤖 AI Suggest</a>
+  </div>
 
   {% if expenses %}
   <div class="table-responsive shadow-sm mb-4">
@@ -53,11 +52,18 @@
         <h4 class="text-primary">${{ "%.2f"|format(total) }}</h4>
       </div>
     </div>
+
     {% if budget is not none %}
     <div class="col-md-4">
       <div class="card shadow-sm p-3 text-center">
         <h6>Budget</h6>
-        <h4 class="text-warning">${{ "%.2f"|format(budget) }}</h4>
+        <form method="POST" action="{{ url_for('trips.update_budget', trip_name=trip_name) }}" class="d-flex flex-column align-items-center">
+          <div class="input-group input-group-sm mb-2" style="max-width: 150px;">
+            <span class="input-group-text">$</span>
+            <input type="number" name="new_budget" value="{{ "%.2f"|format(budget) }}" step="0.01" min="0" class="form-control text-end" required>
+          </div>
+          <button type="submit" class="btn btn-sm btn-outline-warning">Update</button>
+        </form>
       </div>
     </div>
     <div class="col-md-4">
@@ -71,7 +77,11 @@
     {% else %}
     <div class="col">
       <div class="alert alert-warning text-center">
-        ⚠️ No budget set. <a href="{{ url_for('budgets.set_budget', trip_name=trip_name) }}">Set one here</a>.
+        ⚠️ No budget set. Please enter a budget below.
+        <form method="POST" action="{{ url_for('trips.update_budget', trip_name=trip_name) }}" class="mt-2 d-flex justify-content-center">
+          <input type="number" name="new_budget" placeholder="Enter budget" step="0.01" min="0" required class="form-control w-auto text-end me-2" style="max-width: 150px;">
+          <button type="submit" class="btn btn-sm btn-warning">Set Budget</button>
+        </form>
       </div>
     </div>
     {% endif %}
@@ -84,7 +94,6 @@
       <li class="list-group-item d-flex justify-content-between align-items-center">
         {{ cat }}
         <span class="badge bg-brown rounded-pill">${{ "%.2f"|format(amt) }}</span>
-
       </li>
       {% endfor %}
     </ul>
