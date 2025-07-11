@@ -2,13 +2,12 @@
 {% block title %}Trip: {{ trip_name | title }}{% endblock %}
 
 {% block content %}
-<!-- Link to external custom stylesheet -->
+<!-- Link external custom CSS -->
 <link rel="stylesheet" href="{{ url_for('static', filename='css/custom.css') }}">
 
 <div class="container">
   <h2 class="text-center mb-4">📍 Trip: {{ trip_name | title }}</h2>
 
-  <!-- Action buttons -->
   <div class="d-flex flex-wrap justify-content-center gap-3 mb-4">
     <a href="{{ url_for('trips.add_expense', trip_name=trip_name) }}" class="btn btn-warm">➕ Add Expense</a>
     <a href="{{ url_for('charts.view_chart', trip_name=trip_name) }}" class="btn btn-warm">📊 View Chart</a>
@@ -66,12 +65,26 @@
         </form>
       </div>
     </div>
+
     <div class="col-md-4">
       <div class="card shadow-sm p-3 text-center">
         <h6>Remaining</h6>
         <h4 class="{% if remaining < 0 %}text-danger{% else %}text-success{% endif %}">
           ${{ "%.2f"|format(remaining) }}
         </h4>
+
+        {% set percent_used = (total / budget * 100) | round(1) %}
+        <div class="progress mt-2" style="height: 20px;">
+          <div class="progress-bar
+            {% if percent_used < 70 %}bg-success
+            {% elif percent_used < 90 %}bg-warning
+            {% else %}bg-danger{% endif %}"
+            role="progressbar"
+            style="width: {{ percent_used }}%;" 
+            aria-valuenow="{{ percent_used }}" aria-valuemin="0" aria-valuemax="100">
+            {{ percent_used }}%
+          </div>
+        </div>
       </div>
     </div>
     {% else %}
@@ -99,6 +112,11 @@
     </ul>
   </div>
 
+  <div class="mt-5">
+    <h5>📊 Category Spending Chart</h5>
+    <canvas id="categoryChart" height="120"></canvas>
+  </div>
+
   {% else %}
   <div class="alert alert-info text-center mt-4">
     No expenses added yet for this trip.
@@ -109,4 +127,15 @@
     <a href="{{ url_for('trips.home') }}" class="btn btn-outline-secondary">← Back to Trips</a>
   </div>
 </div>
+
+<!-- JSON data for Chart.js -->
+{% if category_totals %}
+<script id="categoryData" type="application/json">
+  {{ category_totals | tojson }}
+</script>
+{% endif %}
+
+<!-- External Chart.js and script -->
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script src="{{ url_for('static', filename='js/category-chart.js') }}"></script>
 {% endblock %}
